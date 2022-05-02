@@ -1,12 +1,11 @@
 package domain
 
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 
-internal class PlayerTest {
-    @Test
-    fun testShouldCreateAPlayerObject() {
+class PlayerTest : StringSpec({
+    "test should create a player object with an empty hand" {
         val player = Player.create()
-        assertTrue(player is Player)
+        player.handCards.isEmpty() shouldBe true
     }
-}
+})
