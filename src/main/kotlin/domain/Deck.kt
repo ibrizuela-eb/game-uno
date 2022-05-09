@@ -1,9 +1,10 @@
 package domain
 
+import domain.Constants.DEFAULT_DECK_CARDS
 import java.util.UUID
 
 class Deck(
-    private val cards: MutableList<String> = mutableListOf("2R", "6R", "2Y", "3Y", "2B", "5B", "8G", "9G", "+2", "+4")
+    private val cards: MutableList<String> = DEFAULT_DECK_CARDS.toMutableList()
 ) {
     private val liveStack: MutableList<String> = mutableListOf()
     private val takeStack: MutableList<String> = mutableListOf()
@@ -34,13 +35,13 @@ class Deck(
     }
 
     fun getCard(): String? {
-        var liveCard = takeStack.removeFirstOrNull()
-        if (liveCard == null) {
+        var takeCard = takeStack.removeFirstOrNull()
+        if (takeCard == null) {
             takeStack.addAll(liveStack.slice(0 until liveStack.size))
             takeStack.shuffle()
-            liveCard = takeStack.removeFirstOrNull()
+            takeCard = takeStack.removeFirstOrNull()
         }
         // var liveCard = takeStack.removeFirstOrNull() ?: run {...}
-        return liveCard
+        return takeCard
     }
 }
