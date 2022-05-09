@@ -1,9 +1,11 @@
 package domain
 
 import domain.Constants.DEFAULT_DECK_CARDS
+import domain.Constants.MAX_HAND_CARDS
 import java.util.UUID
 
 class Deck(
+    val id: UUID = UUID.randomUUID(),
     private val cards: MutableList<String> = DEFAULT_DECK_CARDS.toMutableList()
 ) {
     private val liveStack: MutableList<String> = mutableListOf()
@@ -14,9 +16,9 @@ class Deck(
     }
 
     fun dealCards(playerOneId: UUID, playerTwoId: UUID): Map<UUID, List<String>> {
-        val cardsPlayerOne = cards.slice(IntRange(0, 2))
+        val cardsPlayerOne = cards.slice(0 until MAX_HAND_CARDS)
         cards.removeAll(cardsPlayerOne)
-        val cardsPlayerTwo = cards.slice(IntRange(0, 2))
+        val cardsPlayerTwo = cards.slice(0 until MAX_HAND_CARDS)
         cards.removeAll(cardsPlayerTwo)
         return mapOf(
             Pair(playerOneId, cardsPlayerOne),

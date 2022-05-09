@@ -17,4 +17,5 @@ object Constants {
         "+4", "+4", "+4", "+4",
         "#", "#", "#", "#",
     )
+    const val MAX_HAND_CARDS = 7
 }

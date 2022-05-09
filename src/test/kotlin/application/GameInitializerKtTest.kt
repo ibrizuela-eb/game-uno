@@ -1,0 +1,32 @@
+package application
+
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import repos.DeckRepo
+import repos.PlayerRepo
+import java.util.UUID
+
+class GameInitializerKtTest : StringSpec({
+    "players should have handcards when initializeGame" {
+        val playerRepo = PlayerRepo()
+        val deckRepo = DeckRepo()
+        val playerOneId = UUID.randomUUID()
+        val playerTwoId = UUID.randomUUID()
+        initializeGame(playerOneId, playerTwoId, playerRepo, deckRepo)
+        val playerOneHandCards = playerRepo.findById(playerOneId)!!.handCards
+        playerOneHandCards.size shouldNotBe null
+    }
+
+    "initializeGame should have live card when it is called" {
+        val playerRepo = PlayerRepo()
+        val deckRepo = DeckRepo()
+        val playerOneId = UUID.randomUUID()
+        val playerTwoId = UUID.randomUUID()
+        initializeGame(playerOneId, playerTwoId, playerRepo, deckRepo)
+        val deckId = UUID.randomUUID()
+        val liveCard = deckRepo.findById(deckId)!!.getLiveCard()
+        liveCard shouldNotBe null
+    }
+
+})
