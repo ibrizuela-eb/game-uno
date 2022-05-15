@@ -1,7 +1,7 @@
 package repos
 
 import domain.Deck
-import java.util.*
+import java.util.UUID
 
 class DeckRepo {
     private val decks = mutableListOf<Deck>()
