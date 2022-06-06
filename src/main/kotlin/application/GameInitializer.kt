@@ -6,23 +6,30 @@ import repos.DeckRepo
 import repos.PlayerRepo
 import java.util.UUID
 
+data class GameElements(
+    val playerOneId: UUID,
+    val playerTwoId: UUID,
+    val deckId: UUID,
+)
+
 fun initializeGame(
-    playerOneId: UUID,
-    playerTwoId: UUID,
-    deckId: UUID,
+    gameElements: GameElements,
     playerRepo: PlayerRepo,
     deckRepo: DeckRepo
 ) {
-    val deck = Deck(id = deckId)
+    val deck = Deck(id = gameElements.deckId)
     deck.shuffleCards()
-    val handCards = deck.dealCards(playerOneId, playerTwoId)
+    val handCards = deck.dealCards(
+        playerOneId = gameElements.playerOneId,
+        playerTwoId = gameElements.playerTwoId
+    )
     val playerOne = Player(
-        id = playerOneId,
-        handCards = handCards[playerOneId]!!.toMutableList()
+        id = gameElements.playerOneId,
+        handCards = handCards[gameElements.playerOneId]!!.toMutableList()
     )
     val playerTwo = Player(
-        id = playerTwoId,
-        handCards = handCards[playerTwoId]!!.toMutableList()
+        id = gameElements.playerTwoId,
+        handCards = handCards[gameElements.playerTwoId]!!.toMutableList()
     )
     deck.initializeStacks()
     // Save players and deck

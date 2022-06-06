@@ -13,15 +13,18 @@ class GameInitializerKtTest : StringSpec({
         val playerOneId = UUID.randomUUID()
         val playerTwoId = UUID.randomUUID()
         val deckId = UUID.randomUUID()
-        initializeGame(
+        val gameElements = GameElements(
             playerOneId = playerOneId,
             playerTwoId = playerTwoId,
-            deckId = deckId,
+            deckId = deckId
+        )
+        initializeGame(
+            gameElements = gameElements,
             playerRepo = playerRepo,
             deckRepo = deckRepo
         )
-        val playerOneHandCards = playerRepo.findById(playerOneId)!!.handCards
-        val playerTwoHandCards = playerRepo.findById(playerTwoId)!!.handCards
+        val playerOneHandCards = playerRepo.findById(playerOneId)!!.handCards()
+        val playerTwoHandCards = playerRepo.findById(playerTwoId)!!.handCards()
         playerOneHandCards.size shouldNotBe null
         playerTwoHandCards.size shouldNotBe null
     }
@@ -32,10 +35,13 @@ class GameInitializerKtTest : StringSpec({
         val playerOneId = UUID.randomUUID()
         val playerTwoId = UUID.randomUUID()
         val deckId = UUID.randomUUID()
-        initializeGame(
+        val gameElements = GameElements(
             playerOneId = playerOneId,
             playerTwoId = playerTwoId,
-            deckId = deckId,
+            deckId = deckId
+        )
+        initializeGame(
+            gameElements = gameElements,
             playerRepo = playerRepo,
             deckRepo = deckRepo
         )
