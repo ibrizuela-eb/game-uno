@@ -36,14 +36,28 @@ class Deck(
         return liveStack.last()
     }
 
-    fun getCard(): String? {
+    fun getCard(): String {
         var takeCard = takeStack.removeFirstOrNull()
         if (takeCard == null) {
-            takeStack.addAll(liveStack.slice(0 until liveStack.size))
+            takeStack.addAll(liveStack.slice(1 until liveStack.size))
             takeStack.shuffle()
             takeCard = takeStack.removeFirstOrNull()
         }
-        // var liveCard = takeStack.removeFirstOrNull() ?: run {...}
-        return takeCard
+        return takeCard!!
+    }
+
+    fun getCards(n: Int = 1): List<String> {
+//        val cards = mutableListOf<String>()
+//        for (i in 0..n) {
+//            var takeCard = takeStack.removeFirstOrNull()
+//            if (takeCard == null) {
+//                takeStack.addAll(liveStack.slice(0 until liveStack.size))
+//                takeStack.shuffle()
+//                takeCard = takeStack.removeFirstOrNull()
+//            }
+//            cards.add(takeCard)
+//            // var liveCard = takeStack.removeFirstOrNull() ?: run {...}
+//        }
+        return (0 until n).map { getCard() }
     }
 }

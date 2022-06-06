@@ -1,6 +1,8 @@
 package domain
 
+import factories.DeckFactory
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldNotBeIn
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.every
@@ -56,5 +58,13 @@ class DeckTest : StringSpec({
         val mockedDeck = mockk<Deck>()
         every { mockedDeck.getCard() } returns "10G"
         mockedDeck.getCard() shouldBe "10G"
+    }
+
+    "test getCards should not return the liveCard" {
+        var deckCards = mutableListOf<String>("1Y", "4G", "6R", "3R")
+        val deck = DeckFactory { cards = deckCards.toMutableList() }
+        val liveCard = deck.getLiveCard()
+        val cardsTaken = deck.getCards(n = 3)
+        liveCard shouldNotBeIn cardsTaken
     }
 })
