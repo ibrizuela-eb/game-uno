@@ -6,6 +6,6 @@ import io.kotest.matchers.shouldBe
 class PlayerTest : StringSpec({
     "test should create a player object with an empty hand" {
         val player = Player.create()
-        player.handCards.isEmpty() shouldBe true
+        player.handCards().isEmpty() shouldBe true
     }
 })

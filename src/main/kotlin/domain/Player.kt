@@ -4,14 +4,18 @@ import java.util.UUID
 
 class Player(
     val id: UUID = UUID.randomUUID(),
-    handCards: MutableList<String> = mutableListOf()
+    private val handCards: MutableList<String> = mutableListOf()
 ) {
-    val handCards: MutableList<String> = handCards
-        get() = field.toMutableList()
+
+    fun handCards(): MutableList<String> = handCards.toMutableList()
 
     companion object {
         fun create(): Player {
             return Player()
         }
+    }
+
+    fun addCards(cards: List<String>) {
+        handCards.addAll(cards)
     }
 }
