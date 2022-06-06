@@ -60,4 +60,8 @@ class Deck(
 //        }
         return (0 until n).map { getCard() }
     }
+
+    fun placeCard(card: String) {
+        liveStack.add(card)
+    }
 }

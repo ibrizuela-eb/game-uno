@@ -3,6 +3,7 @@ package domain
 import factories.DeckFactory
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldNotBeIn
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.every
@@ -48,9 +49,9 @@ class DeckTest : StringSpec({
     }
 
     "test should always return a card even after taken all cards" {
-        val deckMocked = Deck(cards = mutableListOf("2R", "6R"))
-        deckMocked.initializeStacks()
-        deckMocked.getCard() shouldBe "6R"
+        val deckMocked = DeckFactory { cards = mutableListOf("2R", "6R") }
+        val card = deckMocked.getCard()
+        deckMocked.placeCard(card)
         deckMocked.getCard() shouldNotBe null
     }
 
@@ -66,5 +67,13 @@ class DeckTest : StringSpec({
         val liveCard = deck.getLiveCard()
         val cardsTaken = deck.getCards(n = 3)
         liveCard shouldNotBeIn cardsTaken
+    }
+
+    "test placecCArd should place the card as liveCard" {
+        val deckMocked = DeckFactory { cards = mutableListOf("2R", "6R", "4Y") }
+        deckMocked.getLiveCard() shouldBe "2R"
+        val card = deckMocked.getCard()
+        deckMocked.placeCard(card)
+        deckMocked.getLiveCard() shouldBe card
     }
 })
