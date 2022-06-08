@@ -29,4 +29,20 @@ class CardTest : StringSpec({
         )
         playerTarget.handCards() shouldBe mutableListOf("4G", "6R")
     }
+
+    "action should add 4 cards from the stack to a player" {
+        val cardPlusFour = GAME_CARDS["+4"]
+        val deck = DeckFactory {
+            cards = mutableListOf<String>("1Y", "4G", "6R", "2B", "2G")
+        }
+        val myId = UUID.randomUUID()
+        val playerTarget = PlayerFactory {
+            id = myId
+        }
+        cardPlusFour!!.action.apply(
+            deck = deck,
+            targetPlayer = playerTarget
+        )
+        playerTarget.handCards() shouldBe mutableListOf("4G", "6R", "2B", "2G")
+    }
 })
