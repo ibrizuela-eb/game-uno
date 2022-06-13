@@ -64,4 +64,33 @@ class Deck(
     fun placeCard(card: String) {
         liveStack.add(card)
     }
+
+    fun validateCard(card: Card): Boolean{
+        val liveCard = GAME_CARDS[getLiveCard()]
+        /**
+         * 1. Carta de color numerica -> Carta de color numerica
+         * 2R -> 4R ColorCard.color == ColorCard.color
+         * 2R -> 2Y ColorCard.value == ColorCard.value
+         * 2R -> +2R ColorCard.color == ColorCard.color
+         * 2. Carta de color numerica -> WildCard
+         * 2R -> #
+         * 2R -> +4
+         * +2R -> +4
+         * 3. WildCard -> Carta de color numerica
+         * +4 (R) -> 2R
+         * +4 (R) -> +2R
+         * # (R) -> 2R
+         * 4. WildCard -> WildCard
+         * +4 -> +4
+         * # -> #
+         * # -> +4
+         */
+        when {
+            liveCard is ColorCard && card is ColorCard -> liveCard.value == card.value || liveCard.color == card.color
+            liveCard is ColorCard && card is WildCard -> true
+            liveCard is WildCard && card is ColorCard -> liveCard.color == card.color
+            liveCard is WildCard && card is WildCard ->
+        }
+        return card.value
+    }
 }

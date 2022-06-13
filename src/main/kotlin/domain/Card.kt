@@ -23,7 +23,10 @@ class NoEffect : CardAction {
     }
 }
 
-abstract class Card(val action: CardAction) {
+/**
+ * Una selaed class solo permite tener hijos dentro del mismo archivo
+ */
+abstract sealed class Card(val action: CardAction) {
     abstract fun validate(
         liveCard: String,
         moveCards: List<String>
@@ -47,7 +50,7 @@ class ColorCard(val value: String, val color: String, action: CardAction) : Card
     ): Boolean = true
 }
 
-class WildCard(val value: String, action: CardAction) : Card(action) {
+class WildCard(val value: String, action: CardAction, val color: String? = null) : Card(action) {
     override fun validate(
         liveCard: String,
         moveCards: List<String>
@@ -57,7 +60,7 @@ class WildCard(val value: String, action: CardAction) : Card(action) {
 val noEffect = NoEffect()
 val GAME_CARDS = mapOf<String, Card>(
     "+4" to WildCard("+4", AddFourCards()),
-    "#" to WildCard("", noEffect),
+    "#" to WildCard("#", noEffect),
     "+2R" to ColorCard("+2", "R", AddTwoCards()),
     "0R" to ColorCard("0", "R", noEffect),
     "1R" to ColorCard("1", "R", noEffect),
@@ -69,8 +72,8 @@ val GAME_CARDS = mapOf<String, Card>(
     "7R" to ColorCard("7", "R", noEffect),
     "8R" to ColorCard("8", "R", noEffect),
     "9R" to ColorCard("9", "R", noEffect),
-    "(X)R" to ColorCard("9", "R", noEffect),
-    "<>R" to ColorCard("9", "R", noEffect),
+    "(X)R" to ColorCard("(X)", "R", noEffect),
+    "<>R" to ColorCard("<>", "R", noEffect),
     "+2B" to ColorCard("+2", "B", AddTwoCards()),
     "0B" to ColorCard("0", "B", noEffect),
     "1B" to ColorCard("1", "B", noEffect),
@@ -82,8 +85,8 @@ val GAME_CARDS = mapOf<String, Card>(
     "7B" to ColorCard("7", "B", noEffect),
     "8B" to ColorCard("8", "B", noEffect),
     "9B" to ColorCard("9", "B", noEffect),
-    "(X)B" to ColorCard("9", "B", noEffect),
-    "<>B" to ColorCard("9", "B", noEffect),
+    "(X)B" to ColorCard("(X)", "B", noEffect),
+    "<>B" to ColorCard("<>", "B", noEffect),
     "+2G" to ColorCard("+2", "G", AddTwoCards()),
     "0G" to ColorCard("0", "G", noEffect),
     "1G" to ColorCard("1", "G", noEffect),
@@ -95,8 +98,8 @@ val GAME_CARDS = mapOf<String, Card>(
     "7G" to ColorCard("7", "G", noEffect),
     "8G" to ColorCard("8", "G", noEffect),
     "9G" to ColorCard("9", "G", noEffect),
-    "(X)G" to ColorCard("9", "G", noEffect),
-    "<>G" to ColorCard("9", "G", noEffect),
+    "(X)G" to ColorCard("(X)", "G", noEffect),
+    "<>G" to ColorCard("<>", "G", noEffect),
     "+2Y" to ColorCard("+2", "Y", AddTwoCards()),
     "0Y" to ColorCard("0", "Y", noEffect),
     "1Y" to ColorCard("1", "Y", noEffect),
@@ -108,6 +111,6 @@ val GAME_CARDS = mapOf<String, Card>(
     "7Y" to ColorCard("7", "Y", noEffect),
     "8Y" to ColorCard("8", "Y", noEffect),
     "9Y" to ColorCard("9", "Y", noEffect),
-    "(X)Y" to ColorCard("9", "Y", noEffect),
-    "<>Y" to ColorCard("9", "Y", noEffect),
+    "(X)Y" to ColorCard("(X)", "Y", noEffect),
+    "<>Y" to ColorCard("<>", "Y", noEffect),
 )

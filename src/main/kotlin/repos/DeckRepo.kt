@@ -13,4 +13,15 @@ class DeckRepo {
     fun findById(id: UUID): Deck? {
         return decks.firstOrNull { it.id == id }
     }
+
+    companion object {
+        var deckRepo: DeckRepo? = null
+
+        fun getInstance(): DeckRepo {
+            if (deckRepo == null) {
+                deckRepo = DeckRepo()
+            }
+            return deckRepo!!
+        }
+    }
 }
