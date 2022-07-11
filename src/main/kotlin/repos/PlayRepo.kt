@@ -11,7 +11,7 @@ class PlayRepo {
     }
 
     fun findActivePlay(gameId: UUID): Play? {
-        return plays.firstOrNull { it.gameId == gameId && it.isActive}
+        return plays.firstOrNull { it.gameId == gameId && it.isActive }
     }
 
     companion object {

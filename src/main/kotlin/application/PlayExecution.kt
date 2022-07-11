@@ -12,7 +12,7 @@ import java.util.UUID
 /**
  * Una sealed class solo permite tener hijos dentro del mismo archivo
  */
-//sealed class PlayerAction {
+// sealed class PlayerAction {
 //    companion object {
 //        fun fromString(action: String): PlayerAction {
 //            return when(action) {
@@ -22,10 +22,10 @@ import java.util.UUID
 //            }
 //        }
 //    }
-//}
-//object PassTurn: PlayerAction()
-//object TakeCard: PlayerAction()
-//data class PlayCard(val card: String): PlayerAction()
+// }
+// object PassTurn: PlayerAction()
+// object TakeCard: PlayerAction()
+// data class PlayCard(val card: String): PlayerAction()
 enum class PlayerAction {
     PASS_TURN,
     TAKE_CARD,

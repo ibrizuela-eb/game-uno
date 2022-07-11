@@ -65,7 +65,7 @@ class Deck(
         liveStack.add(card)
     }
 
-    fun canPlayCard(card: Card): Boolean{
+    fun canPlayCard(card: Card): Boolean {
         val liveCard = GAME_CARDS[getLiveCard()]
         /**
          * 1. Carta de color numerica -> Carta de color numerica

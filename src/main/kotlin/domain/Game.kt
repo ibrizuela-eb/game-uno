@@ -10,7 +10,7 @@ class Game(
 ) {
     fun passTurn() {
         currentPlayerIndex += 1
-        if (currentPlayerIndex >= players.size){
+        if (currentPlayerIndex >= players.size) {
             currentPlayerIndex = 0
         }
     }
