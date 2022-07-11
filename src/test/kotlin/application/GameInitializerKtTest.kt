@@ -8,8 +8,8 @@ import java.util.UUID
 
 class GameInitializerKtTest : StringSpec({
     "players should have handcards when initializeGame" {
-        val playerRepo = PlayerRepo()
-        val deckRepo = DeckRepo()
+        val playerRepo = PlayerRepo.getInstance()
+        val deckRepo = DeckRepo.getInstance()
         val playerOneId = UUID.randomUUID()
         val playerTwoId = UUID.randomUUID()
         val deckId = UUID.randomUUID()
@@ -30,8 +30,8 @@ class GameInitializerKtTest : StringSpec({
     }
 
     "initializeGame should have live card when it is called" {
-        val playerRepo = PlayerRepo()
-        val deckRepo = DeckRepo()
+        val playerRepo = PlayerRepo.getInstance()
+        val deckRepo = DeckRepo.getInstance()
         val playerOneId = UUID.randomUUID()
         val playerTwoId = UUID.randomUUID()
         val deckId = UUID.randomUUID()

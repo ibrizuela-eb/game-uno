@@ -18,4 +18,13 @@ class Player(
     fun addCards(cards: List<String>) {
         handCards.addAll(cards)
     }
+
+    fun getCard(cardRepresentation: String): Card {
+        if (cardRepresentation !in handCards) throw Error("The player does not have that card")
+        return GAME_CARDS[cardRepresentation]!!
+    }
+
+    fun removeCard(cardRepresentation: String) {
+        handCards.remove(cardRepresentation)
+    }
 }

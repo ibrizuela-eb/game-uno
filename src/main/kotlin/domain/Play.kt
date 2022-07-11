@@ -8,14 +8,8 @@ class Play(val gameId: UUID = UUID.randomUUID()) {
 
     fun cardsQueue(): List<Card> = cardsQueue.toList()
 
-    // La jugada deberia conocer al game y el game la relaciona con el deck
-    fun validate(card: Card, deck: Deck) {
-        deck.validateCard(card)
-    }
-
-    fun playCard(card: Card) {
+    fun addCardToQueue(card: Card) {
         if (isActive) {
-            // validateCard
             cardsQueue.add(card)
         }
     }

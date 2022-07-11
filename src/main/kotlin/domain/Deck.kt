@@ -65,7 +65,7 @@ class Deck(
         liveStack.add(card)
     }
 
-    fun validateCard(card: Card): Boolean{
+    fun canPlayCard(card: Card): Boolean{
         val liveCard = GAME_CARDS[getLiveCard()]
         /**
          * 1. Carta de color numerica -> Carta de color numerica
@@ -85,12 +85,12 @@ class Deck(
          * # -> #
          * # -> +4
          */
-        when {
+        return when {
             liveCard is ColorCard && card is ColorCard -> liveCard.value == card.value || liveCard.color == card.color
             liveCard is ColorCard && card is WildCard -> true
             liveCard is WildCard && card is ColorCard -> liveCard.color == card.color
-            liveCard is WildCard && card is WildCard ->
+            liveCard is WildCard && card is WildCard -> true // This will be check in the future
+            else -> false
         }
-        return card.value
     }
 }

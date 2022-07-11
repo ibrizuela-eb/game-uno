@@ -1,11 +1,31 @@
 package application
 
-import domain.Card
+import domain.Deck
+import domain.Play
+import domain.Player
 import repos.DeckRepo
+import repos.GameRepo
 import repos.PlayRepo
 import repos.PlayerRepo
 import java.util.UUID
 
+/**
+ * Una sealed class solo permite tener hijos dentro del mismo archivo
+ */
+//sealed class PlayerAction {
+//    companion object {
+//        fun fromString(action: String): PlayerAction {
+//            return when(action) {
+//                "PASS_TURN" -> PassTurn
+//                "TAKE_CARD" -> PassTurn
+//                "PLAY_CARD" -> PlayCard
+//            }
+//        }
+//    }
+//}
+//object PassTurn: PlayerAction()
+//object TakeCard: PlayerAction()
+//data class PlayCard(val card: String): PlayerAction()
 enum class PlayerAction {
     PASS_TURN,
     TAKE_CARD,
@@ -14,10 +34,13 @@ enum class PlayerAction {
 
 fun executePlay(
     playerId: UUID,
-    deckId: UUID,
+    gameId: UUID,
     action: String,
     playerRepo: PlayerRepo = PlayerRepo.getInstance(),
-    deckRepo: DeckRepo = DeckRepo.getInstance()
+    deckRepo: DeckRepo = DeckRepo.getInstance(),
+    gameRepo: GameRepo = GameRepo.getInstance(),
+    playRepo: PlayRepo = PlayRepo.getInstance(),
+    cardRepresentation: String? = null
 ) {
     /**
      * Pasar los repos por argumento: INVERSION DE DEPENDENCIAS
@@ -37,22 +60,39 @@ fun executePlay(
     val currentPlayer = playerRepo.findById(
         id = playerId,
     ) ?: throw IllegalStateException("Player does not exist")
+    val currentGame = gameRepo.findById(
+        id = gameId,
+    ) ?: throw IllegalStateException("Game does not exist")
     val currentDeck = deckRepo.findById(
-        id = deckId,
+        id = currentGame.deckId,
     ) ?: throw IllegalStateException("Deck does not exist")
+    val currentPlay = playRepo.findActivePlay(
+        gameId = currentGame.id,
+    ) ?: Play(gameId = currentGame.id)
 
-    val playerAction = PlayerAction.valueOf(action)
-    val bla = when (playerAction) {
-        PlayerAction.PASS_TURN -> println("")
+    when (PlayerAction.valueOf(action)) {
+        PlayerAction.PASS_TURN -> currentGame.passTurn()
         PlayerAction.TAKE_CARD -> currentPlayer.addCards(listOf(currentDeck.getCard()))
-        PlayerAction.PLAY_CARD -> println("")
+        PlayerAction.PLAY_CARD -> if (cardRepresentation == null) throw Error("Card could not be null") else TODO()
     }
 
     playerRepo.save(currentPlayer)
+    deckRepo.save(currentDeck)
+    gameRepo.save(currentGame)
+    playRepo.save(currentPlay)
 }
 
-fun playCard(card: Card) {
-    val playRepo = PlayRepo.getInstance()
-    val play = playRepo.findActivePlay(gameId = gameId)
-    //
+fun playCard(player: Player, deck: Deck, play: Play, cardRepresentation: String) {
+    // si el jugador puede colocar la carta, debo quitarsela de su mano de cartas
+    // y colocarla como la carta en juego en el Deck
+    // si no puede jugar esa carta se lo penaliza ejecutandole todas las acciones
+    // en la cola de jugada (en caso de que haya), y pasa el turno
+    val card = player.getCard(cardRepresentation)
+    if (!deck.canPlayCard(card)) {
+        throw Error("You cannot play that card!")
+    }
+    play.addCardToQueue(card)
+    deck.placeCard(cardRepresentation)
+    player.removeCard(cardRepresentation)
+    // En todos lados se deberia consumir card en vez del String
 }
