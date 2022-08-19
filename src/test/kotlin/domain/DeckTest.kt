@@ -68,7 +68,7 @@ class DeckTest : StringSpec({
         liveCard shouldNotBeIn cardsTaken
     }
 
-    "test placecCArd should place the card as liveCard" {
+    "test placeCard should place the card as liveCard" {
         val deckMocked = DeckFactory { cards = mutableListOf("2R", "6R", "4Y") }
         deckMocked.getLiveCard() shouldBe "2R"
         val card = deckMocked.getCard()

@@ -2,6 +2,11 @@ package domain
 
 import java.util.UUID
 
+data class PlayerResponse(
+    val id: String,
+    val handCards: MutableList<String>
+)
+
 class Player(
     val id: UUID = UUID.randomUUID(),
     private val handCards: MutableList<String> = mutableListOf()
@@ -26,5 +31,16 @@ class Player(
 
     fun removeCard(cardRepresentation: String) {
         handCards.remove(cardRepresentation)
+    }
+
+    fun toResponse(): PlayerResponse {
+        return PlayerResponse(
+            id.toString(),
+            handCards
+        )
+    }
+
+    override fun toString(): String {
+        return id.toString()
     }
 }

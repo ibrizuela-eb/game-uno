@@ -3,6 +3,7 @@ package application
 import domain.Deck
 import domain.Play
 import domain.Player
+import org.springframework.stereotype.Service
 import repos.DeckRepo
 import repos.GameRepo
 import repos.PlayRepo
@@ -32,15 +33,12 @@ enum class PlayerAction {
     PLAY_CARD
 }
 
-fun executePlay(
-    playerId: UUID,
-    gameId: UUID,
-    action: String,
-    playerRepo: PlayerRepo = PlayerRepo.getInstance(),
-    deckRepo: DeckRepo = DeckRepo.getInstance(),
-    gameRepo: GameRepo = GameRepo.getInstance(),
-    playRepo: PlayRepo = PlayRepo.getInstance(),
-    cardRepresentation: String? = null
+@Service
+class PlayExcecutor(
+    val playerRepo: PlayerRepo,
+    val deckRepo: DeckRepo,
+    val gameRepo: GameRepo,
+    val playRepo: PlayRepo,
 ) {
     /**
      * Pasar los repos por argumento: INVERSION DE DEPENDENCIAS
@@ -57,29 +55,36 @@ fun executePlay(
      * 2. IOC registra los beans configurados con anotaciones en Spring
      * 3. Le podes pedir al IOC que te de una instancia segun lo que se configuro
      */
-    val currentPlayer = playerRepo.findById(
-        id = playerId,
-    ) ?: throw IllegalStateException("Player does not exist")
-    val currentGame = gameRepo.findById(
-        id = gameId,
-    ) ?: throw IllegalStateException("Game does not exist")
-    val currentDeck = deckRepo.findById(
-        id = currentGame.deckId,
-    ) ?: throw IllegalStateException("Deck does not exist")
-    val currentPlay = playRepo.findActivePlay(
-        gameId = currentGame.id,
-    ) ?: Play(gameId = currentGame.id)
+    fun run(
+        playerId: UUID,
+        gameId: UUID,
+        action: String,
+        cardRepresentation: String? = null
+    ) {
+        val currentPlayer = playerRepo.findById(
+            id = playerId,
+        ) ?: throw IllegalStateException("Player does not exist")
+        val currentGame = gameRepo.findById(
+            id = gameId,
+        ) ?: throw IllegalStateException("Game does not exist")
+        val currentDeck = deckRepo.findById(
+            id = currentGame.deckId,
+        ) ?: throw IllegalStateException("Deck does not exist")
+        val currentPlay = playRepo.findActivePlay(
+            gameId = currentGame.id,
+        ) ?: Play(gameId = currentGame.id)
 
-    when (PlayerAction.valueOf(action)) {
-        PlayerAction.PASS_TURN -> currentGame.passTurn()
-        PlayerAction.TAKE_CARD -> currentPlayer.addCards(listOf(currentDeck.getCard()))
-        PlayerAction.PLAY_CARD -> if (cardRepresentation == null) throw Error("Card could not be null") else TODO()
+        when (PlayerAction.valueOf(action)) {
+            PlayerAction.PASS_TURN -> currentGame.passTurn()
+            PlayerAction.TAKE_CARD -> currentPlayer.addCards(listOf(currentDeck.getCard()))
+            PlayerAction.PLAY_CARD -> if (cardRepresentation == null) throw Error("Card could not be null") else TODO()
+        }
+
+        playerRepo.save(currentPlayer)
+        deckRepo.save(currentDeck)
+        gameRepo.save(currentGame)
+        playRepo.save(currentPlay)
     }
-
-    playerRepo.save(currentPlayer)
-    deckRepo.save(currentDeck)
-    gameRepo.save(currentGame)
-    playRepo.save(currentPlay)
 }
 
 fun playCard(player: Player, deck: Deck, play: Play, cardRepresentation: String) {
